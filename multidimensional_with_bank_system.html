@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // regular expression start 
+        var email_id =
+            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; /*Emai_id regular expression*/
+        var num = /^\d+$/; /*Number regular expression*/
+        var birth_date =
+            /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/; /*birth date regular expression*/
+        var letters = /^[A-Za-z]+$/;
+        var pass_word = /^[A-Za-z]\w{7,14}$/; /*password regular expression*/
+        // regular expression end
+
+
+        // list start
+        var bank_data = [];
+        var user = 1;
+        // list end
+
+
+        // WELCOME PROGRAM START
+        var welcome_flg = 0
+        do {
+            var welcome = (prompt('welcome HN Bank\n1.User side\n2.Admin side\n3.Exit'))
+            if (welcome.match(num)) {
+                welcome = parseInt(welcome);
+                // WELCOME PROGGRAM-USER SIDE start
+
+                if (welcome == 1) {
+                    welcome_flg = 0
+                    var user_side_flg = 0
+                    do {
+                        var user_side = (prompt('What process do you do?\n1.Register\n2.Login\n3.Exit'))
+                        user_side.match(num)
+                        user_side = parseInt(user_side);
+                        // WELCOME PROGGRAM-USER SIDE start-Register
+                        if (user_side == 1) {
+                            var Register_flg = 0
+                            do {
+                                // Name 
+                                do {
+                                    var user_nam = (prompt('enter your Name'))
+                                }
+                                while (user_nam.length != 3 && !user_nam.match(letters))
+                                // Mobile number
+                                do {
+                                    var m_number = (prompt('enter your Mobile number'))
+                                }
+                                while (m_number.length != 10 && !m_number.match(num))
+                                //password
+                                do {
+                                    var Enter_password = (prompt('enter your password '))
+                                }
+                                while (Enter_password.length < 4)
+                                //bank_balnce push
+                                var bank_balnce = 0
+                                //account_status push
+                                var account_status = 'pending'
+                                //auto_account_number push
+                                var auto_account_number = (Math.floor(Math.random() * 9999999999999999));
+                                alert('You are successfully registered')
+                                // user_input_object
+                                var sub_list = {
+                                /*0*/ 'userid': user++,
+                                /*1*/ 'user_name': user_nam,
+                                /*2*/ 'user_number': m_number,
+                                /*3*/ 'user_password': Enter_password,
+                                /*4*/ 'user_bank_balnce': bank_balnce,
+                                /*5*/ 'user_status': account_status,
+                                /*6*/ 'user_account_number': auto_account_number,
+                                /*7*/ 'user_account_history': []
+                                };
+                                bank_data.push(sub_list)
+                                Register_flg = 1
+                            }
+                            while (Register_flg == 0)
+                        }
+                        // WELCOME PROGGRAM-USER SIDE start-Login
+                        else if (user_side == 2) {
+
+                            var Login_flg = 0
+                            do {
+                                var login_nam = (prompt('enter your User Name'));
+                                for (var i in bank_data) {
+
+                                    if (login_nam == bank_data[i]['user_name']) {
+                                        var Login_flg = 1
+                                        do {
+                                            var login_pass_word = (prompt('enter your User password'));
+                                            if (login_pass_word == bank_data[i]['user_password']) {
+                                                alert('you are login')
+                                                Login_flg = 2
+                                                if (bank_data[i]['user_status'] == 'Active') {
+                                                    alert('welome:-' +
+                                                        'your user id:-' + bank_data[i][
+                                                        'userid'] + '\n' +
+                                                        'Mo_number:-' + bank_data[i]['user_number'] + '\n' +
+                                                        'your bank account_number:-' + bank_data[i]['user_account_number'] + '\n'
+                                                    )
+                                                    var bank_process_flg = 0
+                                                    // WELCOME PROGGRAM-USER SIDE start-Login-bank_process
+                                                    do {
+                                                        var bank_process = (prompt('What process do you do?\n1.deposit\n2.Withdraw\n3.History\n4.Exit'))
+
+                                                        // bank_process deposit
+                                                        if (bank_process == 1) {
+                                                            var self_other_flg = 0
+                                                            do {
+                                                                var self_other = (parseInt(prompt('1.self\n2.other')))
+                                                                var depo_index = -1;
+                                                                var nm = '';
+                                                                if (self_other == 1) {
+                                                                    depo_index = i
+                                                                    nm = 'self'
+                                                                }
+                                                                else {
+                                                                    var other_user_id = ('enter user id for other account ')
+                                                                    for (var j in bank_data) {
+                                                                        if (other_user_id == bank_data[j]['userid']) {
+                                                                            depo_index = j;
+                                                                            alert(j)
+                                                                            break;
+                                                                        }
+                                                                    }
+                                                                    alert(depo_index)
+                                                                    if (depo_index == i) {
+                                                                        nm = 'self';
+                                                                        alert('this is your account')
+                                                                    }
+                                                                    else {
+                                                                        nm = bank_data[depo_index]['user_name']
+                                                                    }
+                                                                }
+                                                                do {
+                                                                    var deposit = (prompt('Enter deposit amount'))
+                                                                }
+                                                                while (!deposit.match(num))
+                                                                deposit = parseInt(deposit)
+                                                                var old_amunt = bank_data[depo_index]['user_bank_balnce']
+                                                                var total = old_amunt + deposit;
+                                                                bank_data[depo_index]['user_bank_balnce'] = total;
+                                                                alert(bank_data[depo_index]['user_bank_balnce'])
+                                                                // bank_data[i]['user_bank_balnce'] = deposit + bank_data[i]['user_bank_balnce']
+                                                                // alert(bank_data[i]['user_bank_balnce']);
+
+                                                                // history push the blank list (sub_list)
+                                                                var history_id_auto = bank_data[depo_index]['user_account_history'].length + 1;
+                                                                var temp_history_object = {
+                                                                    'history_id': history_id_auto,
+                                                                    'credit_amunt': 'credit',
+                                                                    'old_amunt': old_amunt,
+                                                                    'deposit_amunt': deposit,
+                                                                    'balnce_total': total,
+                                                                    'nm': nm
+                                                                }
+                                                                bank_data[depo_index]['user_account_history'].push(temp_history_object)
+                                                                alert('credit successfully')
+                                                                self_other_flg = 1
+
+                                                            }
+                                                            while (self_other_flg == 0)
+
+                                                        }
+                                                        // bank_process Withdraw 
+                                                        else if (bank_process == 2) {
+                                                            do {
+                                                                var Withdraw_amount = (prompt('Enter Withdraw amount'))
+                                                            }
+                                                            while (!Withdraw_amount.match(num))
+                                                            if (bank_data[i]['user_bank_balnce'] < Withdraw_amount) {
+                                                                alert('beta aatla  paisa nathi')
+                                                            }
+                                                            else {
+
+                                                                // bank_data[i]['user_bank_balnce'] = bank_data[i]['user_bank_balnce'] - amount
+                                                                // alert(bank_data[i]['user_bank_balnce']);
+
+                                                                var old_amunt = bank_data[depo_index]['user_bank_balnce']
+                                                                var total = old_amunt - Withdraw_amount;
+
+                                                                bank_data[depo_index]['user_bank_balnce'] = total;
+                                                                alert(bank_data[depo_index]['user_bank_balnce'])
+                                                                // history push the blank list (sub_list)
+                                                                var history_id_auto = bank_data[depo_index]['user_account_history'].length + 1;
+                                                                var temp_history_object = {
+                                                                    'history_id': history_id_auto,
+                                                                    'credit_amunt': 'debit',
+                                                                    'old_amunt': old_amunt,
+                                                                    'deposit_amunt': Withdraw_amount,
+                                                                    'balnce_total': total,
+                                                                    'nm': nm
+                                                                };
+                                                                bank_data[depo_index]['user_account_history'].push(temp_history_object)
+                                                                alert('debit successfully')
+
+                                                            }
+                                                        }
+
+                                                        // bank_process History 
+                                                        else if (bank_process == 3) {
+                                                            alert('History ni sir re ha padi')
+                                                            var temp_history = '';
+                                                            for (var k of bank_data[depo_index]['user_account_history']) {
+                                                                temp_history = temp_history +
+                                                                    k['history_id'] +
+                                                                    ' - ' + k['credit_amunt'] +
+                                                                    ' - ' + k['old_amunt'] +
+                                                                    ' - ' + k['deposit_amunt'] +
+                                                                    ' - ' + k['balnce_total'] +
+                                                                    ' _ ' + k['nm'] +
+                                                                    '\n';
+                                                            }
+                                                            alert(temp_history);
+                                                        }
+                                                        // bank_process Exit
+                                                        else if (bank_process == 4) {
+                                                            alert('Exit pass')
+                                                            bank_process_flg = 1
+                                                        }
+                                                        else {
+                                                            alert("Invaid choice!!")
+                                                        }
+                                                    }
+                                                    while (bank_process_flg == 0)
+                                                }
+                                                else {
+                                                    alert('your status is pending\n please contact you bank manager')
+                                                }
+                                                break;
+                                            }
+                                            else if (Login_flg = 1) {
+                                                alert('invalid password')
+                                            }
+                                        }
+                                        while (Login_flg == 1)
+                                    }
+
+                                }
+                            }
+                            while (Login_flg == 0)
+
+                        }
+                        // WELCOME PROGGRAM-USER SIDE start-Exit
+                        else if (user_side == 3) {
+                            var user_side_flg = 1
+                        }
+                    }
+                    while (user_side_flg == 0)
+                }
+                // WELCOME PROGGRAM-ADMIN SIDE start
+                else if (welcome == 2) {
+                    welcome_flg = 0
+                    var admin_side_flg = 0
+                    do {
+                        var admin_side = (prompt('What process do you do?\n1.manage User\n2.User wise history\n3.Exit'));
+                        // WELCOME PROGGRAM-ADMIN SIDE start-manage User
+                        if (admin_side == 1) {
+                            alert('admin_side -1')
+                            do {
+                                var user_id_manage = prompt('Enter user id for Active process')
+                                user_id_manage.match(num)
+                                for (var j in bank_data) {
+                                    if (user_id_manage == bank_data[j]['userid']) {
+                                        alert(bank_data[j]['user_status'])
+                                        bank_data[j]['user_status'] = 'Active';
+                                        alert(bank_data[j]['user_name'] + '\n' + 'Active success this account')
+                                        var admin_side_flg = 1
+
+                                    }
+                                }
+                                if (!user_id_manage.match(num)) {
+                                    alert('plz valid id Enter')
+                                }
+                            }
+                            while (!user_id_manage.match(num))
+                        }
+                        // WELCOME PROGGRAM-ADMIN SIDE start-User wise history
+                        else if (admin_side == 2) {
+                            alert('admin_side -1')
+                        }
+                        // WELCOME PROGGRAM-ADMIN SIDE start-Exit
+                        else if (admin_side == 3) {
+                            alert('admin_side -1')
+                            admin_side_flg = 1
+                        }
+                    }
+                    while (admin_side_flg == 0)
+                }
+
+                // WELCOME PROGGRAM-EXIT 
+                else if (welcome == 3) {
+                    alert('EXIT-3')
+                    welcome_flg = 1
+                }
+                else {
+                    alert("invalid choice!!!")
+                }
+            }
+        } while (welcome_flg == 0)
+        // WELCOME PROGRAM END
+
+
+    </script>
+
+</body>
+
+</html>
